@@ -7,8 +7,12 @@ using UnityEngine;
 public class FollowMouse : MonoBehaviour {
 
     public Vector3 offset = new Vector3(0, 0, 10);
+    public float smoothTime = 0.1f;
+
+    private Vector3 velocity;
 
     private void Update () {
-        transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + offset;
-	}
+        Vector3 targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + offset;
+        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+    }
 }
