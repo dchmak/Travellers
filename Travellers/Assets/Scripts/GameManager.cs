@@ -9,28 +9,31 @@ public class GameManager : MonoBehaviour {
 
     public CircleManager circle;
     [Header("Events")]
-    public UnityEvent OnLoseEvents;
+    public UnityEvent duringPlayEvents;
+    public UnityEvent onLoseEvents;
     
     private bool hasStart = false;
 
     private void Update() {
         if (!hasStart) {
-            CheckStart();
+            if (CheckStart()) {
+                hasStart = true;
+            }
         } else {
-            CheckLose();
+            duringPlayEvents.Invoke();
+
+            if (CheckLose()) {
+                onLoseEvents.Invoke();
+            }
         }
     }
 
-    private void CheckStart() {
-        if (circle.InsideCenterCircle(Camera.main.ScreenToWorldPoint(Input.mousePosition))) {
-            hasStart = true;
-        }
+    private bool CheckStart() {
+        return circle.InsideCenterCircle(Camera.main.ScreenToWorldPoint(Input.mousePosition));
     }
 
-    private void CheckLose() {
-        if (!circle.InsideCenterCircle(Camera.main.ScreenToWorldPoint(Input.mousePosition))) {
-            OnLoseEvents.Invoke();
-        }
+    private bool CheckLose() {
+        return !circle.InsideCenterCircle(Camera.main.ScreenToWorldPoint(Input.mousePosition));
     }    
 
     private void OnValidate() {

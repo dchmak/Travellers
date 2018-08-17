@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CircleManager : MonoBehaviour {
 
-    public ParticleSystem centerCircle;
+    public GameObject centerCircle;
     public ParticleSystem concentricCircles;
     [Space]
     [Min(0)] public float radius;
@@ -15,10 +15,21 @@ public class CircleManager : MonoBehaviour {
         return Vector2.Distance(position, transform.position) < radius;
     }
 
+    public void ChangeRadius (float change) {
+        radius += change * Time.deltaTime;
+    }
+
+    private void Update() {
+        UpdateCircles();
+    }
+
     private void OnValidate() {
+        UpdateCircles();
+    }
+
+    private void UpdateCircles() {
         if (centerCircle != null) {
-            ParticleSystem.MainModule centerCircleMain = centerCircle.main;
-            centerCircleMain.startSize = radius * 2;
+            centerCircle.transform.localScale = Vector2.one * radius * 2;
         }
 
         if (concentricCircles != null) {
@@ -35,4 +46,6 @@ public class CircleManager : MonoBehaviour {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, radius);
     }
+
+
 }
