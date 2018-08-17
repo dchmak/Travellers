@@ -7,7 +7,7 @@ using UnityEngine;
 public class FollowMouse : MonoBehaviour {
 
     public Vector3 offset = new Vector3(0, 0, 10);
-    public float smoothTime = 0.1f;
+    [Min(0)] public float smoothTime = 0.1f;
 
     private Vector3 velocity;
 

@@ -9,21 +9,16 @@ public class CircleManager : MonoBehaviour {
     public ParticleSystem centerCircle;
     public ParticleSystem concentricCircles;
     [Space]
-    public float radius;
+    [Min(0)] public float radius;
 
-    public bool InsideCenterCircle() {
-        Vector2 mousePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        return Vector2.Distance(mousePostion, transform.position) < radius;
-    }
-
-    private void Update() {
-        print(InsideCenterCircle());
+    public bool InsideCenterCircle(Vector2 position) {
+        return Vector2.Distance(position, transform.position) < radius;
     }
 
     private void OnValidate() {
         if (centerCircle != null) {
             ParticleSystem.MainModule centerCircleMain = centerCircle.main;
-            centerCircleMain.startSize = radius;
+            centerCircleMain.startSize = radius * 2;
         }
 
         if (concentricCircles != null) {
@@ -31,8 +26,13 @@ public class CircleManager : MonoBehaviour {
             ParticleSystem.SizeOverLifetimeModule concentricCirclesSizeOverLifeTime = concentricCircles.sizeOverLifetime;
             Keyframe[] keyframes = new Keyframe[2];
             keyframes[0] = new Keyframe(0, 1);
-            keyframes[1] = new Keyframe(1, radius / concentricCirclesMain.startSize.constant);
+            keyframes[1] = new Keyframe(1, radius * 2 / concentricCirclesMain.startSize.constant);
             concentricCirclesSizeOverLifeTime.size = new ParticleSystem.MinMaxCurve(1, new AnimationCurve(keyframes));
         }
+    }
+
+    private void OnDrawGizmosSelected() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, radius);
     }
 }
