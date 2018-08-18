@@ -10,6 +10,9 @@ public class CircleManager : MonoBehaviour {
     public ParticleSystem concentricCircles;
     [Space]
     [Min(0)] public float radius;
+    [Min(0)] public float smoothTime;
+
+    private float velocity;
 
     public bool InsideCenterCircle(Vector2 position) {
         return Vector2.Distance(position, transform.position) < radius;
@@ -46,6 +49,4 @@ public class CircleManager : MonoBehaviour {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, radius);
     }
-
-
 }

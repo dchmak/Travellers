@@ -7,12 +7,19 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour {
 
+    public static GameManager instance;
+
     public CircleManager circle;
     [Header("Events")]
     public UnityEvent duringPlayEvents;
     public UnityEvent onLoseEvents;
     
     private bool hasStart = false;
+
+    private void Awake() {
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+    }
 
     private void Update() {
         if (!hasStart) {
